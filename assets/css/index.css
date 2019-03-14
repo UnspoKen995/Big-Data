@@ -1,0 +1,64 @@
+
+.get {
+      background: #1E5B94;
+      color: #fff;
+      text-align: center;
+      padding: 100px 0;
+      height: 500px;
+      width: 100%;  
+    }
+
+    .get-title {
+      font-size: 200%;
+      border: 2px solid #fff;
+      padding: 20px;
+      display: inline-block;
+    }
+
+    .get-btn {
+      margin-top: 30px;
+      background: #fff;
+      border-radius: 30px;
+    }
+
+
+
+.City {
+  background: #fff;
+  height: 800px;
+}
+
+/*.cityShow{
+  width: 400px；
+  text-align:center;
+  height: 100%;
+}*/
+
+.Salry {
+  background: #eeedf0;
+  height: 500px;
+}
+
+.salryShow{
+  padding-top: 30px;
+  margin: 0 auto;
+  width: 500px；
+  height: 500px;
+}
+
+.Person {
+  background: #fff;
+
+  color: #7f8c8d;
+  height: 780px;
+  width: 100%;
+}
+
+
+.footer p {
+  color: #7f8c8d;
+  margin: 0;
+  padding: 15px 0;
+  text-align: center;
+  background: #2d3e50;
+}

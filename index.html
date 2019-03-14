@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <title>BigData For IT</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp"/>
+
+  <link rel="alternate icon" type="image/png" href="assets/i/favicon.png">
+  <link rel="stylesheet" href="assets/css/amazeui.min.css"/>
+  <link rel="stylesheet" type="text/css" href="assets/css/index.css">
+<body>
+<header class="am-topbar am-topbar-fixed-top">
+  <div class="am-container">
+    <h1 class="am-topbar-brand">
+      <a href="#">BigData For IT</a>
+    </h1>
+    <div class="am-collapse am-topbar-collapse" id="collapse-head">
+      <ul class="am-nav am-nav-pills am-topbar-nav">
+        <li class="am-active"><a href="#">Home</a></li>
+
+        <!-- 如何绑定同界面转换？ -->
+        <li><a href="#City1">Data For City</a></li>
+        <li><a href="#Salry">Data For Salry</a></li>
+        <li><a href="#Person">Data For Person</a></li>
+      </ul>
+
+<!--       <div class="am-topbar-right">
+        <button class="am-btn am-btn-secondary am-topbar-btn am-btn-sm"><span class="am-icon-pencil"></span> 注册</button>
+      </div>
+ -->
+    </div>
+  </div>
+</header>
+
+<!-- 各个城市计算机岗位数 地图 -->
+<!-- 左边数量最多的三个城市 -->
+
+<!-- 是否可以同时展示该城市薪资水平 -->
+<div class="get">
+  <div class="am-g">
+    <div class="am-u-lg-12">
+      <h1 class="get-title">BigData For IT</h1>
+
+      <p>
+        大数据改变未来
+      </p>
+
+      <p>
+        <a href="#Salry" class="am-btn am-btn-sm get-btn">开启大数据Life</a>
+      </p>
+    </div>
+  </div>
+</div>
+<!-- end -->
+
+<!-- 大数据需求量最高的十个城市 计算机相关岗位最多的前十个城市-->
+<!-- 堆积条形图 多个数据同时展示 -->
+<div class="City">
+<div class="cityShow" id="City1" style="width: 1000px ;  height: 400px; margin: 0 auto; padding-top: 30px;"></div>
+<div class="cityShow" id="City2" style="width: 1000px ;  height: 400px; margin: 0 auto; padding-top: 30px;"></div>
+</div>
+<!-- end -->
+
+
+<!-- 计算机相关工资最高的前十个岗位 -->
+<!-- 平均工资最高的前十个城市 -->
+<!-- 南丁格尔玫瑰图 -->
+<div class="Salry">
+<div class="salryShow" id="Salry" style="width: 800px; height: 450px"></div>
+</div>
+
+<!-- 企业对大数据人才需求类型 饼图 -->
+<!-- 学历统计 要求学历和各个数量 饼图 -->
+<!-- 需求量最大的前十个计算机相关技能 字符云 -->
+
+<div class="Person">
+<div class="personShow" id="Person" style="height: 400px; width: 50%; padding-top: 60px; float: left;"></div>
+<div class="personShow" id="Person1" style="height: 400px; width: 50%; padding-top: 60px; float: left;"></div>
+<div class="personShow" id="Person2" style="height: 400px; width: 60%; padding-top: 60px;margin: 0 auto"></div>
+</div>
+
+<footer class="footer">
+  <p><a href="#" target="_blank">Designed by uk&minos  Data by #f&Hua</p>
+</footer>
+
+<!--[if lt IE 9]>
+<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="assets/js/amazeui.ie8polyfill.min.js"></script>
+<![endif]-->
+
+<!--<![endif]-->
+<script src="https://cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
+<script src="assets/js/amazeui.min.js"></script>
+<script src="http://echarts.baidu.com/build/dist/echarts.js"></script>
+<script type="text/javascript">
+// 路径配置
+require.config({
+    paths: {
+        echarts: 'http://echarts.baidu.com/build/dist'
+    }
+});
+
+// 使用
+require(
+    [
+        'echarts',
+        'echarts/chart/bar',
+        'echarts/chart/map', // 使用柱状图就加载bar模块，按需加载
+        'echarts/chart/pie',
+        'echarts/chart/wordCloud'
+    ],
+    function (ec) {
+        // 基于准备好的dom，初始化echarts图表
+    var myCity1 = ec.init(document.getElementById('City1'));
+    var myCity2 = ec.init(document.getElementById('City2'));
+    var mySalry = ec.init(document.getElementById('Salry'));
+    var myPerson = ec.init(document.getElementById('Person'));
+    var myPerson1 = ec.init(document.getElementById('Person1'));
+    var myPerson2 = ec.init(document.getElementById('Person2'));
+        
+    var option = {
+    title : {
+        text: '大数据需求量最高的十个城市',
+        x:'center'
+    },
+    tooltip : {
+        trigger: 'item',
+        formatter: "{a} <br/>{b} : {c} ({d}%)"
+    },
+    legend: {
+        orient : 'vertical',
+        x : 'left',
+        data:['北京','上海','南京','广州','成都','杭州','武汉','深圳','苏州','郑州']
+    },
+    toolbox: {
+        show : true,
+        feature : {
+            mark : {show: true},
+            dataView : {show: true, readOnly: false},
+            magicType : {
+                show: true, 
+                type: ['pie', 'funnel'],
+                option: {
+                    funnel: {
+                        x: '25%',
+                        width: '50%',
+                        funnelAlign: 'left',
+                        max: 1548
+                    }
+                }
+            },
+            restore : {show: true},
+            saveAsImage : {show: true}
+        }
+    },
+    calculable : true,
+    series : [
+        {
+            name:'访问来源',
+            type:'pie',
+            radius : '55%',
+            center: ['50%', '60%'],
+            data:[
+                {value:54079, name:'上海'},
+                {value:83762, name:'北京'},
+                {value:23073, name:'南京'},
+                {value:45687, name:'广州'},
+                {value:30473, name:'成都'},
+                {value:26885, name:'杭州'},
+                {value:22953, name:'武汉'},
+                {value:58457, name:'深圳'},
+                {value:16468, name:'苏州'},
+                {value:18883, name:'郑州'},
+            ]
+        }
+    ]
+};
+  var option0 = {
+    title : {
+        text: '计算机相关岗位最多的前十个城市',
+        x:'center'
+    },
+    tooltip : {
+        trigger: 'item',
+        formatter: "{a} <br/>{b} : {c} ({d}%)"
+    },
+    legend: {
+        orient : 'vertical',
+        x : 'left',
+        data:['北京','上海','南京','广州','成都','杭州','武汉','深圳','苏州','郑州']
+    },
+    toolbox: {
+        show : true,
+        feature : {
+            mark : {show: true},
+            dataView : {show: true, readOnly: false},
+            magicType : {
+                show: true, 
+                type: ['pie', 'funnel'],
+                option: {
+                    funnel: {
+                        x: '25%',
+                        width: '50%',
+                        funnelAlign: 'left',
+                        max: 1548
+                    }
+                }
+            },
+            restore : {show: true},
+            saveAsImage : {show: true}
+        }
+    },
+    calculable : true,
+    series : [
+        {
+            name:'访问来源',
+            type:'pie',
+            radius : '55%',
+            center: ['50%', '60%'],
+            data:[
+                 {value:909, name:'上海'},
+                {value:2562, name:'北京'},
+                {value:373, name:'南京'},
+                {value:572, name:'广州'},
+                {value:542, name:'成都'},
+                {value:349, name:'杭州'},
+                {value:309, name:'武汉'},
+                {value:635, name:'深圳'},
+                {value:1336, name:'苏州'},
+                {value:403, name:'郑州'},
+            ]
+        }
+    ]
+};                  
+    var option1 = {
+    title : {
+        text: '计算机相关工资最高的十个岗位',
+        x:'center'
+    },
+    tooltip : {
+        trigger: 'item',
+        formatter: "{a} <br/>{b} : {c} ({d}%)"
+    },
+    legend: {
+        x : 'center',
+        y : 'bottom',
+        data:['六盘水','兴平','商洛','宜城','深圳','珲春','迪庆','遂宁','鸡西','鹤岗']
+    },
+    toolbox: {
+        show : true,
+        feature : {
+            mark : {show: true},
+            dataView : {show: true, readOnly: false},
+            magicType : {
+                show: true, 
+                type: ['pie', 'funnel']
+            },
+            restore : {show: true},
+            saveAsImage : {show: true}
+        }
+    },
+    calculable : true,
+    series : [
+        {
+            name:'半径模式',
+            type:'pie',
+            radius : [20, 110],
+            center : ['25%', 200],
+            roseType : 'radius',
+            width: '40%',       // for funnel
+            max: 40,            // for funnel
+            itemStyle : {
+                normal : {
+                    label : {
+                        show : false
+                    },
+                    labelLine : {
+                        show : false
+                    }
+                },
+                emphasis : {
+                    label : {
+                        show : true
+                    },
+                    labelLine : {
+                        show : true
+                    }
+                }
+            },
+            data:[
+                {value:73695, name:'六盘水'},
+                {value:64696,  name:'兴平'},
+                {value:51348, name:'商洛'},
+                {value:125000, name:'宜城'},
+                {value:50000, name:'深圳'},
+                {value:37500, name:'迪庆'},
+                {value:125000, name:'珲春'},
+                {value:67824, name:'遂宁'},
+                {value:73607, name:'鸡西'},
+                {value:37500, name:'鹤岗'}
+            ]
+        },
+        {
+            name:'面积模式',
+            type:'pie',
+            radius : [30, 110],
+            center : ['75%', 200],
+            roseType : 'area',
+            x: '50%',               // for funnel
+            max: 40,                // for funnel
+            sort : 'ascending',     // for funnel
+            data:[
+                {value:73695, name:'六盘水'},
+                {value:64696,  name:'兴平'},
+                {value:51348, name:'商洛'},
+                {value:125000, name:'宜城'},
+                {value:50000, name:'深圳'},
+                {value:37500, name:'迪庆'},
+                {value:125000, name:'珲春'},
+                {value:67824, name:'遂宁'},
+                {value:73607, name:'鸡西'},
+                {value:37500, name:'鹤岗'}
+            ]
+        }
+    ]
+};
+
+   var option2 = {
+    title: {
+        x: 'center',
+        text: '大数据人才需求类型',
+        // subtext: 'Rainbow bar example',
+        // link: 'http://echarts.baidu.com/doc/example.html'
+    },
+    tooltip: {
+        trigger: 'item'
+    },
+    toolbox: {
+        show: true,
+        feature: {
+            dataView: {show: true, readOnly: false},
+            restore: {show: true},
+            saveAsImage: {show: true}
+        }
+    },
+    calculable: true,
+    grid: {
+        borderWidth: 0,
+        y: 80,
+        y2: 60
+    },
+    xAxis: [
+        {
+            type: 'category',
+            show: false,
+            data: ['Line', 'Bar', 'Scatter', 'K', 'Pie', 'Radar', 'Chord', 'Force', 'Map', 'Gauge']
+        }
+    ],
+    yAxis: [
+        {
+            type: 'value',
+            show: false
+        }
+    ],
+    series: [
+        {
+            name: '大数据人才需求类型',
+            type: 'bar',
+            itemStyle: {
+                normal: {
+                    color: function(params) {
+                        // build a color map as your need.
+                        var colorList = [
+                          '#C1232B','#B5C334','#FCCE10','#E87C25','#27727B',
+                           '#FE8463','#9BCA63','#FAD860','#F3A43B','#60C0DD',
+                           '#D7504B','#C6E579','#F4E001','#F0805A','#26C0C0'
+                        ];
+                        return colorList[params.dataIndex]
+                    },
+                    label: {
+                        show: true,
+                        position: 'top',
+                        formatter: '{b}\n{c}'
+                    }
+                }
+            },
+            data: [12,21,10,4,12,5,6,5,25,23,7],
+            // markPoint: {
+            //     tooltip: {
+            //         trigger: 'item',
+            //         backgroundColor: 'rgba(0,0,0,0)',
+            //         formatter: function(params){
+            //             return '<img src="' 
+            //                     + params.data.symbol.replace('image://', '')
+            //                     + '"/>';
+            //         }
+            //     },
+            //     data: [
+            //         {xAxis:0, y: 350, name:'Line', symbolSize:20, symbol: 'image://../asset/ico/折线图.png'},
+            //         {xAxis:1, y: 350, name:'Bar', symbolSize:20, symbol: 'image://../asset/ico/柱状图.png'},
+            //         {xAxis:2, y: 350, name:'Scatter', symbolSize:20, symbol: 'image://../asset/ico/散点图.png'},
+            //         {xAxis:3, y: 350, name:'K', symbolSize:20, symbol: 'image://../asset/ico/K线图.png'},
+            //         {xAxis:4, y: 350, name:'Pie', symbolSize:20, symbol: 'image://../asset/ico/饼状图.png'},
+            //         {xAxis:5, y: 350, name:'Radar', symbolSize:20, symbol: 'image://../asset/ico/雷达图.png'},
+            //         {xAxis:6, y: 350, name:'Chord', symbolSize:20, symbol: 'image://../asset/ico/和弦图.png'},
+            //         {xAxis:7, y: 350, name:'Force', symbolSize:20, symbol: 'image://../asset/ico/力导向图.png'},
+            //         {xAxis:8, y: 350, name:'Map', symbolSize:20, symbol: 'image://../asset/ico/地图.png'},
+            //         {xAxis:9, y: 350, name:'Gauge', symbolSize:20, symbol: 'image://../asset/ico/仪表盘.png'},
+            //         {xAxis:10, y: 350, name:'Funnel', symbolSize:20, symbol: 'image://../asset/ico/漏斗图.png'},
+            //     ]
+            // }
+        }
+    ]
+};
+
+  var option3 = {
+    title: {
+        x: 'center',
+        text: '岗位学历要求',
+        // subtext: 'Rainbow bar example',
+        // link: 'http://echarts.baidu.com/doc/example.html'
+    },
+    tooltip: {
+        trigger: 'item'
+    },
+    toolbox: {
+        show: true,
+        feature: {
+            dataView: {show: true, readOnly: false},
+            restore: {show: true},
+            saveAsImage: {show: true}
+        }
+    },
+    calculable: true,
+    grid: {
+        borderWidth: 0,
+        y: 80,
+        y2: 60
+    },
+    xAxis: [
+        {
+            type: 'category',
+            show: false,
+            data: ['Line', 'Bar', 'Scatter', 'K', 'Pie', 'Radar', 'Chord', 'Force', 'Map', 'Gauge',]
+        }
+    ],
+    yAxis: [
+        {
+            type: 'value',
+            show: false
+        }
+    ],
+    series: [
+        {
+            name: '岗位学历要求',
+            type: 'bar',
+            itemStyle: {
+                normal: {
+                    color: function(params) {
+                        // build a color map as your need.
+                        var colorList = [
+                          '#C1232B','#B5C334','#FCCE10','#E87C25','#27727B',
+                           '#FE8463','#9BCA63','#FAD860','#F3A43B','#60C0DD',
+                           '#D7504B','#C6E579','#F4E001','#F0805A','#26C0C0'
+                        ];
+                        return colorList[params.dataIndex]
+                    },
+                    label: {
+                        show: true,
+                        position: 'top',
+                        formatter: '{b}\n{c}'
+                    }
+                }
+            },
+            data: [12,21,10,4,12,5,6,5,25,23,7],
+            // markPoint: {
+            //     tooltip: {
+            //         trigger: 'item',
+            //         backgroundColor: 'rgba(0,0,0,0)',
+            //         formatter: function(params){
+            //             return '<img src="' 
+            //                     + params.data.symbol.replace('image://', '')
+            //                     + '"/>';
+            //         }
+            //     },
+            //     data: [
+            //         {xAxis:0, y: 350, name:'Line', symbolSize:20, symbol: 'image://../asset/ico/折线图.png'},
+            //         {xAxis:1, y: 350, name:'Bar', symbolSize:20, symbol: 'image://../asset/ico/柱状图.png'},
+            //         {xAxis:2, y: 350, name:'Scatter', symbolSize:20, symbol: 'image://../asset/ico/散点图.png'},
+            //         {xAxis:3, y: 350, name:'K', symbolSize:20, symbol: 'image://../asset/ico/K线图.png'},
+            //         {xAxis:4, y: 350, name:'Pie', symbolSize:20, symbol: 'image://../asset/ico/饼状图.png'},
+            //         {xAxis:5, y: 350, name:'Radar', symbolSize:20, symbol: 'image://../asset/ico/雷达图.png'},
+            //         {xAxis:6, y: 350, name:'Chord', symbolSize:20, symbol: 'image://../asset/ico/和弦图.png'},
+            //         {xAxis:7, y: 350, name:'Force', symbolSize:20, symbol: 'image://../asset/ico/力导向图.png'},
+            //         {xAxis:8, y: 350, name:'Map', symbolSize:20, symbol: 'image://../asset/ico/地图.png'},
+            //         {xAxis:9, y: 350, name:'Gauge', symbolSize:20, symbol: 'image://../asset/ico/仪表盘.png'},
+            //         {xAxis:10, y: 350, name:'Funnel', symbolSize:20, symbol: 'image://../asset/ico/漏斗图.png'},
+            //     ]
+            // }
+        }
+    ]
+};
+  
+function createRandomItemStyle() {
+    return {
+        normal: {
+            color: 'rgb(' + [
+                Math.round(Math.random() * 160),
+                Math.round(Math.random() * 160),
+                Math.round(Math.random() * 160)
+            ].join(',') + ')'
+        }
+    };
+}
+
+var option4 = {
+    title: {
+        text: '需求量最大的计算机相关技能',
+        // link: 'http://www.google.com/trends/hottrends'
+    },
+    tooltip: {
+        show: true
+    },
+    series: [{
+        name: 'Google Trends',
+        type: 'wordCloud',
+        size: ['80%', '80%'],
+        textRotation : [0, 45, 90, -45],
+        textPadding: 0,
+        autoSize: {
+            enable: true,
+            minSize: 14
+        },
+        data: [
+            {
+                name: "Android",
+                value: 11941,
+                itemStyle: {
+                    normal: {
+                        color: 'black'
+                    }
+                }
+            },
+            {
+                name: "JAVA",
+                value: 42571,
+                itemStyle: createRandomItemStyle()
+            },
+            {
+                name: "PHP",
+                value: 16166,
+                itemStyle: createRandomItemStyle()
+            },
+            {
+                name: "Python",
+                value: 5771,
+                itemStyle: createRandomItemStyle()
+            },
+            {
+                name: "UI设计",
+                value: 14156,
+                itemStyle: createRandomItemStyle()
+            },
+            {
+                name: "算法",
+                value: 11526,
+                itemStyle: createRandomItemStyle()
+            },
+            {
+                name: "大数据",
+                value: 12624,
+                itemStyle: createRandomItemStyle()
+            },
+            {
+                name: "数据分析",
+                value: 6047,
+                itemStyle: createRandomItemStyle()
+            },
+            {
+                name: "Web",
+                value: 8914,
+                itemStyle: createRandomItemStyle()
+            },
+            {
+                name: "R语言",
+                value: 13099,
+                itemStyle: createRandomItemStyle()
+            },
+            {
+                name: "JavaScript",
+                value: 10111,
+                itemStyle: createRandomItemStyle()
+            },
+            {
+                name: "C#",
+                value: 8271,
+                itemStyle: createRandomItemStyle()
+            },
+             {
+                name: "SQL",
+                value: 7993,
+                itemStyle: createRandomItemStyle()
+            },
+             {
+                name: "C#",
+                value: 10921,
+                itemStyle: createRandomItemStyle()
+            },
+             {
+                name: "Ruby",
+                value: 8943,
+                itemStyle: createRandomItemStyle()
+            },
+             {
+                name: "Pascal",
+                value: 3755,
+                itemStyle: createRandomItemStyle()
+            },
+        ]
+    }]
+};
+ 
+
+//大数据人才需求类型 
+var names = [];
+var values = [];
+
+$.ajax({
+  url: 'http://minoslee.cn/api/test',
+  type: 'get',
+  dataType: 'json',
+  crossDomain: true,
+  success:function(data){
+    console.log(data);
+    for (var i = 0; i < data.length; i++) {
+      names.push(data[i].post);
+      values.push(data[i].Demand_quantity);
+    }
+    console.log(names,values);
+
+    myPerson.setOption({
+      xAxis:[{
+        data:names
+      }],
+      series:[{
+        data:values
+      }]
+    })
+  }
+})
+.done(function() {
+  console.log("success");
+})
+.fail(function() {
+  console.log("error");
+})
+.always(function() {
+  console.log("complete");
+});
+
+// eduCount
+var edu = [];
+var edu_val = [];
+
+$.ajax({
+  url: 'http://minoslee.cn/api/eduCount',
+  type: 'get',
+  dataType: 'json',
+  crossDomain: true,
+  success:function(data){
+    console.log(data);
+    for (var i = 0; i < data.length; i++) {
+      edu.push(data[i].education);
+      edu_val.push(data[i].needs);
+    }
+    console.log(edu,edu_val);
+
+    myPerson1.setOption({
+      xAxis:[{
+        data:edu
+      }],
+      series:[{
+        data:edu_val
+      }]
+    })
+  }
+})
+
+
+$.ajax({
+  url: 'http://minoslee.cn/api/skillTop',
+  type: 'get',
+  dataType: 'json',
+  crossDomain: true,
+  success:function(data){
+    console.log(data);
+  }
+})
+
+
+var citys = [];
+var salary = []
+$.ajax({
+  url: 'http://minoslee.cn/api/citySalary',
+  type: 'get',
+  dataType: 'json',
+  crossDomain: true,
+  success:function(data){
+    console.log(data);
+    for (var i = 0; i < data.length; i++) {
+      citys.push(data[i].city);
+      salary.push(data[i].avgsalary);
+    }
+    mySalry.setOption({
+      legend:[
+        {
+          data:citys
+        }
+      ],
+    })
+  }
+})
+
+ // myChart.setOption(option5)
+ myCity1.setOption(option); 
+ myCity2.setOption(option0); 
+ mySalry.setOption(option1);
+ myPerson.setOption(option2);
+ myPerson1.setOption(option3);
+ myPerson2.setOption(option4);
+}
+);
+
+
+</script>
+</body>
+</html>
